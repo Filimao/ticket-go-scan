@@ -84,9 +84,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "description", content: "Compre bilhetes online para os melhores eventos. Bilhete digital com QR Code único, download em PDF e entrada rápida." },
       { name: "author", content: "TicketGo" },
       { property: "og:title", content: "TicketGo — Bilhetes premium com QR Code" },
-      { property: "og:description", content: "Descubra e compre bilhetes para concertos, conferências e galas. Rápido, seguro e elegante." },
+      { property: "og:description", content: "Compre bilhetes online para os melhores eventos. Bilhete digital com QR Code único, download em PDF e entrada rápida." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "TicketGo — Bilhetes premium com QR Code" },
+      { name: "twitter:description", content: "Compre bilhetes online para os melhores eventos. Bilhete digital com QR Code único, download em PDF e entrada rápida." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/1ff279dd-9f8c-44fe-af0d-654ffbe34117/id-preview-33ae438d--6031b02b-ed38-417b-9196-3d2be20341c5.lovable.app-1783418347296.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/1ff279dd-9f8c-44fe-af0d-654ffbe34117/id-preview-33ae438d--6031b02b-ed38-417b-9196-3d2be20341c5.lovable.app-1783418347296.png" },
     ],
     links: [
       {
