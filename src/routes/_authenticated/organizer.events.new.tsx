@@ -10,7 +10,7 @@ function NewEvent() {
   return (
     <div className="max-w-3xl">
       <h2 className="font-display text-2xl font-bold mb-6">Novo evento</h2>
-      <EventForm onSaved={(id) => router.navigate({ to: "/organizer/events/$id", params: { id } })} />
+      <EventForm onSaved={(id: string) => router.navigate({ to: "/organizer/events/$id", params: { id } })} />
     </div>
   );
 }
