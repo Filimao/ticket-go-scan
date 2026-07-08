@@ -17,6 +17,7 @@ import { Route as EventsIdRouteImport } from './routes/events.$id'
 import { Route as AuthenticatedTicketsRouteImport } from './routes/_authenticated/tickets'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedOrganizerRouteImport } from './routes/_authenticated/organizer'
+import { Route as AuthenticatedOrganizerIndexRouteImport } from './routes/_authenticated/organizer.index'
 
 const EventsRoute = EventsRouteImport.update({
   id: '/events',
@@ -57,24 +58,31 @@ const AuthenticatedOrganizerRoute = AuthenticatedOrganizerRouteImport.update({
   path: '/organizer',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedOrganizerIndexRoute =
+  AuthenticatedOrganizerIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedOrganizerRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/events': typeof EventsRouteWithChildren
-  '/organizer': typeof AuthenticatedOrganizerRoute
+  '/organizer': typeof AuthenticatedOrganizerRouteWithChildren
   '/profile': typeof AuthenticatedProfileRoute
   '/tickets': typeof AuthenticatedTicketsRoute
   '/events/$id': typeof EventsIdRoute
+  '/organizer/': typeof AuthenticatedOrganizerIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/events': typeof EventsRouteWithChildren
-  '/organizer': typeof AuthenticatedOrganizerRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/tickets': typeof AuthenticatedTicketsRoute
   '/events/$id': typeof EventsIdRoute
+  '/organizer': typeof AuthenticatedOrganizerIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -82,10 +90,11 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/events': typeof EventsRouteWithChildren
-  '/_authenticated/organizer': typeof AuthenticatedOrganizerRoute
+  '/_authenticated/organizer': typeof AuthenticatedOrganizerRouteWithChildren
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/tickets': typeof AuthenticatedTicketsRoute
   '/events/$id': typeof EventsIdRoute
+  '/_authenticated/organizer/': typeof AuthenticatedOrganizerIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -97,15 +106,16 @@ export interface FileRouteTypes {
     | '/profile'
     | '/tickets'
     | '/events/$id'
+    | '/organizer/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
     | '/events'
-    | '/organizer'
     | '/profile'
     | '/tickets'
     | '/events/$id'
+    | '/organizer'
   id:
     | '__root__'
     | '/'
@@ -116,6 +126,7 @@ export interface FileRouteTypes {
     | '/_authenticated/profile'
     | '/_authenticated/tickets'
     | '/events/$id'
+    | '/_authenticated/organizer/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -183,17 +194,38 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedOrganizerRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/organizer/': {
+      id: '/_authenticated/organizer/'
+      path: '/'
+      fullPath: '/organizer/'
+      preLoaderRoute: typeof AuthenticatedOrganizerIndexRouteImport
+      parentRoute: typeof AuthenticatedOrganizerRoute
+    }
   }
 }
 
+interface AuthenticatedOrganizerRouteChildren {
+  AuthenticatedOrganizerIndexRoute: typeof AuthenticatedOrganizerIndexRoute
+}
+
+const AuthenticatedOrganizerRouteChildren: AuthenticatedOrganizerRouteChildren =
+  {
+    AuthenticatedOrganizerIndexRoute: AuthenticatedOrganizerIndexRoute,
+  }
+
+const AuthenticatedOrganizerRouteWithChildren =
+  AuthenticatedOrganizerRoute._addFileChildren(
+    AuthenticatedOrganizerRouteChildren,
+  )
+
 interface AuthenticatedRouteRouteChildren {
-  AuthenticatedOrganizerRoute: typeof AuthenticatedOrganizerRoute
+  AuthenticatedOrganizerRoute: typeof AuthenticatedOrganizerRouteWithChildren
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedTicketsRoute: typeof AuthenticatedTicketsRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
-  AuthenticatedOrganizerRoute: AuthenticatedOrganizerRoute,
+  AuthenticatedOrganizerRoute: AuthenticatedOrganizerRouteWithChildren,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedTicketsRoute: AuthenticatedTicketsRoute,
 }
