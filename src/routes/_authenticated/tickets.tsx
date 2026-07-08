@@ -73,8 +73,9 @@ function TicketsPage() {
 function TicketCard({ t }: { t: TicketRow }) {
   const [qrUrl, setQrUrl] = useState("");
   useEffect(() => {
+    if (t.status !== "valid") return;
     QRCode.toDataURL(t.qr_code, { errorCorrectionLevel: "H", margin: 1, width: 256 }).then(setQrUrl);
-  }, [t.qr_code]);
+  }, [t.qr_code, t.status]);
 
   const dl = async () => {
     if (!t.events) return;
@@ -98,15 +99,21 @@ function TicketCard({ t }: { t: TicketRow }) {
   };
 
   const statusColor = t.status === "valid" ? "text-emerald-400 bg-emerald-500/10 border-emerald-500/30"
+    : t.status === "pending_payment" ? "text-amber-400 bg-amber-500/10 border-amber-500/30"
     : t.status === "used" ? "text-muted-foreground bg-muted border-border"
     : "text-destructive bg-destructive/10 border-destructive/30";
+
+  const statusLabel = t.status === "valid" ? "Válido"
+    : t.status === "pending_payment" ? "Aguarda pagamento"
+    : t.status === "used" ? "Utilizado"
+    : "Cancelado";
 
   return (
     <div className="grid md:grid-cols-[1fr_auto] gap-6 rounded-3xl border border-border/60 bg-card p-6 shadow-[var(--shadow-elegant)]">
       <div className="min-w-0">
         <div className="flex items-center gap-3 flex-wrap">
           <h2 className="font-display text-2xl font-bold truncate">{t.events?.title ?? "Evento"}</h2>
-          <span className={`text-[10px] uppercase tracking-widest px-2 py-0.5 rounded-full border ${statusColor}`}>{t.status === "valid" ? "Válido" : t.status === "used" ? "Utilizado" : "Cancelado"}</span>
+          <span className={`text-[10px] uppercase tracking-widest px-2 py-0.5 rounded-full border ${statusColor}`}>{statusLabel}</span>
         </div>
         <div className="mt-3 grid sm:grid-cols-2 gap-2 text-sm text-muted-foreground">
           {t.events && <p className="flex items-center gap-2"><Calendar className="h-4 w-4 text-gold" /> {formatEventDate(t.events.starts_at)} • {formatEventTime(t.events.starts_at)}</p>}
@@ -118,13 +125,26 @@ function TicketCard({ t }: { t: TicketRow }) {
         </div>
         <div className="mt-4 flex items-center gap-3">
           <span className="font-display text-xl font-bold text-gold">{formatCurrency(Number(t.price_paid), t.currency)}</span>
-          <Button onClick={dl} size="sm" variant="outline" className="border-border/60"><Download className="h-4 w-4 mr-2" /> Baixar PDF</Button>
+          {t.status === "valid" && (
+            <Button onClick={dl} size="sm" variant="outline" className="border-border/60"><Download className="h-4 w-4 mr-2" /> Baixar PDF</Button>
+          )}
         </div>
+        {t.status === "pending_payment" && (
+          <p className="mt-3 text-xs text-amber-400/90 leading-relaxed">
+            Envie o pagamento M-Pesa para <strong>+258 850 147 162</strong> e aguarde a confirmação do organizador. O QR code fica disponível assim que o pagamento for validado.
+          </p>
+        )}
       </div>
       <div className="grid place-items-center">
-        <div className="rounded-2xl bg-white p-3 shadow-lg">
-          {qrUrl && <img src={qrUrl} alt="QR" className="h-32 w-32" />}
-        </div>
+        {t.status === "valid" ? (
+          <div className="rounded-2xl bg-white p-3 shadow-lg">
+            {qrUrl && <img src={qrUrl} alt="QR" className="h-32 w-32" />}
+          </div>
+        ) : t.status === "pending_payment" ? (
+          <div className="rounded-2xl border border-dashed border-amber-500/40 p-6 text-center text-xs text-amber-400/80 h-32 w-32 flex items-center justify-center">
+            Pendente
+          </div>
+        ) : null}
       </div>
     </div>
   );
