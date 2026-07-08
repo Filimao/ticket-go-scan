@@ -1,7 +1,8 @@
 import { Link, useRouter } from "@tanstack/react-router";
-import { Ticket, User, LogOut, Search } from "lucide-react";
+import { Ticket, User, LogOut, Search, LayoutDashboard, Shield, ScanLine } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useSession } from "@/hooks/use-session";
+import { useRoles } from "@/hooks/use-roles";
 import { supabase } from "@/integrations/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
 import {
@@ -15,6 +16,7 @@ import {
 
 export function SiteHeader() {
   const { user } = useSession();
+  const { isAdmin, isOrganizer } = useRoles();
   const router = useRouter();
   const qc = useQueryClient();
 
@@ -62,6 +64,19 @@ export function SiteHeader() {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild><Link to="/profile">Perfil</Link></DropdownMenuItem>
                 <DropdownMenuItem asChild><Link to="/tickets">Meus bilhetes</Link></DropdownMenuItem>
+                {isOrganizer && (
+                  <DropdownMenuItem asChild>
+                    <Link to="/organizer"><LayoutDashboard className="h-4 w-4 mr-2" />Painel do organizador</Link>
+                  </DropdownMenuItem>
+                )}
+                {isAdmin && (
+                  <DropdownMenuItem asChild>
+                    <Link to="/admin"><Shield className="h-4 w-4 mr-2" />Administração</Link>
+                  </DropdownMenuItem>
+                )}
+                <DropdownMenuItem asChild>
+                  <Link to="/scan"><ScanLine className="h-4 w-4 mr-2" />Scanner check-in</Link>
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={signOut} className="text-destructive">
                   <LogOut className="h-4 w-4 mr-2" /> Terminar sessão
