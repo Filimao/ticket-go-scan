@@ -15,7 +15,20 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as EventsIdRouteImport } from './routes/events.$id'
 import { Route as AuthenticatedTicketsRouteImport } from './routes/_authenticated/tickets'
+import { Route as AuthenticatedScanRouteImport } from './routes/_authenticated/scan'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
+import { Route as AuthenticatedOrganizerRouteImport } from './routes/_authenticated/organizer'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedScanIndexRouteImport } from './routes/_authenticated/scan.index'
+import { Route as AuthenticatedOrganizerIndexRouteImport } from './routes/_authenticated/organizer.index'
+import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
+import { Route as AuthenticatedScanEventIdRouteImport } from './routes/_authenticated/scan.$eventId'
+import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated/admin.users'
+import { Route as AuthenticatedAdminSettingsRouteImport } from './routes/_authenticated/admin.settings'
+import { Route as AuthenticatedAdminLogsRouteImport } from './routes/_authenticated/admin.logs'
+import { Route as AuthenticatedAdminEventsRouteImport } from './routes/_authenticated/admin.events'
+import { Route as AuthenticatedOrganizerEventsNewRouteImport } from './routes/_authenticated/organizer.events.new'
+import { Route as AuthenticatedOrganizerEventsIdRouteImport } from './routes/_authenticated/organizer.events.$id'
 
 const EventsRoute = EventsRouteImport.update({
   id: '/events',
@@ -46,19 +59,103 @@ const AuthenticatedTicketsRoute = AuthenticatedTicketsRouteImport.update({
   path: '/tickets',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedScanRoute = AuthenticatedScanRouteImport.update({
+  id: '/scan',
+  path: '/scan',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedOrganizerRoute = AuthenticatedOrganizerRouteImport.update({
+  id: '/organizer',
+  path: '/organizer',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedScanIndexRoute = AuthenticatedScanIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedScanRoute,
+} as any)
+const AuthenticatedOrganizerIndexRoute =
+  AuthenticatedOrganizerIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedOrganizerRoute,
+  } as any)
+const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
+const AuthenticatedScanEventIdRoute =
+  AuthenticatedScanEventIdRouteImport.update({
+    id: '/$eventId',
+    path: '/$eventId',
+    getParentRoute: () => AuthenticatedScanRoute,
+  } as any)
+const AuthenticatedAdminUsersRoute = AuthenticatedAdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
+const AuthenticatedAdminSettingsRoute =
+  AuthenticatedAdminSettingsRouteImport.update({
+    id: '/settings',
+    path: '/settings',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminLogsRoute = AuthenticatedAdminLogsRouteImport.update({
+  id: '/logs',
+  path: '/logs',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
+const AuthenticatedAdminEventsRoute =
+  AuthenticatedAdminEventsRouteImport.update({
+    id: '/events',
+    path: '/events',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedOrganizerEventsNewRoute =
+  AuthenticatedOrganizerEventsNewRouteImport.update({
+    id: '/events/new',
+    path: '/events/new',
+    getParentRoute: () => AuthenticatedOrganizerRoute,
+  } as any)
+const AuthenticatedOrganizerEventsIdRoute =
+  AuthenticatedOrganizerEventsIdRouteImport.update({
+    id: '/events/$id',
+    path: '/events/$id',
+    getParentRoute: () => AuthenticatedOrganizerRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/events': typeof EventsRouteWithChildren
+  '/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/organizer': typeof AuthenticatedOrganizerRouteWithChildren
   '/profile': typeof AuthenticatedProfileRoute
+  '/scan': typeof AuthenticatedScanRouteWithChildren
   '/tickets': typeof AuthenticatedTicketsRoute
   '/events/$id': typeof EventsIdRoute
+  '/admin/events': typeof AuthenticatedAdminEventsRoute
+  '/admin/logs': typeof AuthenticatedAdminLogsRoute
+  '/admin/settings': typeof AuthenticatedAdminSettingsRoute
+  '/admin/users': typeof AuthenticatedAdminUsersRoute
+  '/scan/$eventId': typeof AuthenticatedScanEventIdRoute
+  '/admin/': typeof AuthenticatedAdminIndexRoute
+  '/organizer/': typeof AuthenticatedOrganizerIndexRoute
+  '/scan/': typeof AuthenticatedScanIndexRoute
+  '/organizer/events/$id': typeof AuthenticatedOrganizerEventsIdRoute
+  '/organizer/events/new': typeof AuthenticatedOrganizerEventsNewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -67,6 +164,16 @@ export interface FileRoutesByTo {
   '/profile': typeof AuthenticatedProfileRoute
   '/tickets': typeof AuthenticatedTicketsRoute
   '/events/$id': typeof EventsIdRoute
+  '/admin/events': typeof AuthenticatedAdminEventsRoute
+  '/admin/logs': typeof AuthenticatedAdminLogsRoute
+  '/admin/settings': typeof AuthenticatedAdminSettingsRoute
+  '/admin/users': typeof AuthenticatedAdminUsersRoute
+  '/scan/$eventId': typeof AuthenticatedScanEventIdRoute
+  '/admin': typeof AuthenticatedAdminIndexRoute
+  '/organizer': typeof AuthenticatedOrganizerIndexRoute
+  '/scan': typeof AuthenticatedScanIndexRoute
+  '/organizer/events/$id': typeof AuthenticatedOrganizerEventsIdRoute
+  '/organizer/events/new': typeof AuthenticatedOrganizerEventsNewRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -74,24 +181,85 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/events': typeof EventsRouteWithChildren
+  '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/_authenticated/organizer': typeof AuthenticatedOrganizerRouteWithChildren
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
+  '/_authenticated/scan': typeof AuthenticatedScanRouteWithChildren
   '/_authenticated/tickets': typeof AuthenticatedTicketsRoute
   '/events/$id': typeof EventsIdRoute
+  '/_authenticated/admin/events': typeof AuthenticatedAdminEventsRoute
+  '/_authenticated/admin/logs': typeof AuthenticatedAdminLogsRoute
+  '/_authenticated/admin/settings': typeof AuthenticatedAdminSettingsRoute
+  '/_authenticated/admin/users': typeof AuthenticatedAdminUsersRoute
+  '/_authenticated/scan/$eventId': typeof AuthenticatedScanEventIdRoute
+  '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
+  '/_authenticated/organizer/': typeof AuthenticatedOrganizerIndexRoute
+  '/_authenticated/scan/': typeof AuthenticatedScanIndexRoute
+  '/_authenticated/organizer/events/$id': typeof AuthenticatedOrganizerEventsIdRoute
+  '/_authenticated/organizer/events/new': typeof AuthenticatedOrganizerEventsNewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/events' | '/profile' | '/tickets' | '/events/$id'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/events'
+    | '/admin'
+    | '/organizer'
+    | '/profile'
+    | '/scan'
+    | '/tickets'
+    | '/events/$id'
+    | '/admin/events'
+    | '/admin/logs'
+    | '/admin/settings'
+    | '/admin/users'
+    | '/scan/$eventId'
+    | '/admin/'
+    | '/organizer/'
+    | '/scan/'
+    | '/organizer/events/$id'
+    | '/organizer/events/new'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/events' | '/profile' | '/tickets' | '/events/$id'
+  to:
+    | '/'
+    | '/auth'
+    | '/events'
+    | '/profile'
+    | '/tickets'
+    | '/events/$id'
+    | '/admin/events'
+    | '/admin/logs'
+    | '/admin/settings'
+    | '/admin/users'
+    | '/scan/$eventId'
+    | '/admin'
+    | '/organizer'
+    | '/scan'
+    | '/organizer/events/$id'
+    | '/organizer/events/new'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
     | '/events'
+    | '/_authenticated/admin'
+    | '/_authenticated/organizer'
     | '/_authenticated/profile'
+    | '/_authenticated/scan'
     | '/_authenticated/tickets'
     | '/events/$id'
+    | '/_authenticated/admin/events'
+    | '/_authenticated/admin/logs'
+    | '/_authenticated/admin/settings'
+    | '/_authenticated/admin/users'
+    | '/_authenticated/scan/$eventId'
+    | '/_authenticated/admin/'
+    | '/_authenticated/organizer/'
+    | '/_authenticated/scan/'
+    | '/_authenticated/organizer/events/$id'
+    | '/_authenticated/organizer/events/new'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -145,6 +313,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTicketsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/scan': {
+      id: '/_authenticated/scan'
+      path: '/scan'
+      fullPath: '/scan'
+      preLoaderRoute: typeof AuthenticatedScanRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/profile': {
       id: '/_authenticated/profile'
       path: '/profile'
@@ -152,16 +327,156 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedProfileRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/organizer': {
+      id: '/_authenticated/organizer'
+      path: '/organizer'
+      fullPath: '/organizer'
+      preLoaderRoute: typeof AuthenticatedOrganizerRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/scan/': {
+      id: '/_authenticated/scan/'
+      path: '/'
+      fullPath: '/scan/'
+      preLoaderRoute: typeof AuthenticatedScanIndexRouteImport
+      parentRoute: typeof AuthenticatedScanRoute
+    }
+    '/_authenticated/organizer/': {
+      id: '/_authenticated/organizer/'
+      path: '/'
+      fullPath: '/organizer/'
+      preLoaderRoute: typeof AuthenticatedOrganizerIndexRouteImport
+      parentRoute: typeof AuthenticatedOrganizerRoute
+    }
+    '/_authenticated/admin/': {
+      id: '/_authenticated/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/scan/$eventId': {
+      id: '/_authenticated/scan/$eventId'
+      path: '/$eventId'
+      fullPath: '/scan/$eventId'
+      preLoaderRoute: typeof AuthenticatedScanEventIdRouteImport
+      parentRoute: typeof AuthenticatedScanRoute
+    }
+    '/_authenticated/admin/users': {
+      id: '/_authenticated/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AuthenticatedAdminUsersRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/settings': {
+      id: '/_authenticated/admin/settings'
+      path: '/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AuthenticatedAdminSettingsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/logs': {
+      id: '/_authenticated/admin/logs'
+      path: '/logs'
+      fullPath: '/admin/logs'
+      preLoaderRoute: typeof AuthenticatedAdminLogsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/events': {
+      id: '/_authenticated/admin/events'
+      path: '/events'
+      fullPath: '/admin/events'
+      preLoaderRoute: typeof AuthenticatedAdminEventsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/organizer/events/new': {
+      id: '/_authenticated/organizer/events/new'
+      path: '/events/new'
+      fullPath: '/organizer/events/new'
+      preLoaderRoute: typeof AuthenticatedOrganizerEventsNewRouteImport
+      parentRoute: typeof AuthenticatedOrganizerRoute
+    }
+    '/_authenticated/organizer/events/$id': {
+      id: '/_authenticated/organizer/events/$id'
+      path: '/events/$id'
+      fullPath: '/organizer/events/$id'
+      preLoaderRoute: typeof AuthenticatedOrganizerEventsIdRouteImport
+      parentRoute: typeof AuthenticatedOrganizerRoute
+    }
   }
 }
 
+interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminEventsRoute: typeof AuthenticatedAdminEventsRoute
+  AuthenticatedAdminLogsRoute: typeof AuthenticatedAdminLogsRoute
+  AuthenticatedAdminSettingsRoute: typeof AuthenticatedAdminSettingsRoute
+  AuthenticatedAdminUsersRoute: typeof AuthenticatedAdminUsersRoute
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+}
+
+const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminEventsRoute: AuthenticatedAdminEventsRoute,
+  AuthenticatedAdminLogsRoute: AuthenticatedAdminLogsRoute,
+  AuthenticatedAdminSettingsRoute: AuthenticatedAdminSettingsRoute,
+  AuthenticatedAdminUsersRoute: AuthenticatedAdminUsersRoute,
+  AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+}
+
+const AuthenticatedAdminRouteWithChildren =
+  AuthenticatedAdminRoute._addFileChildren(AuthenticatedAdminRouteChildren)
+
+interface AuthenticatedOrganizerRouteChildren {
+  AuthenticatedOrganizerIndexRoute: typeof AuthenticatedOrganizerIndexRoute
+  AuthenticatedOrganizerEventsIdRoute: typeof AuthenticatedOrganizerEventsIdRoute
+  AuthenticatedOrganizerEventsNewRoute: typeof AuthenticatedOrganizerEventsNewRoute
+}
+
+const AuthenticatedOrganizerRouteChildren: AuthenticatedOrganizerRouteChildren =
+  {
+    AuthenticatedOrganizerIndexRoute: AuthenticatedOrganizerIndexRoute,
+    AuthenticatedOrganizerEventsIdRoute: AuthenticatedOrganizerEventsIdRoute,
+    AuthenticatedOrganizerEventsNewRoute: AuthenticatedOrganizerEventsNewRoute,
+  }
+
+const AuthenticatedOrganizerRouteWithChildren =
+  AuthenticatedOrganizerRoute._addFileChildren(
+    AuthenticatedOrganizerRouteChildren,
+  )
+
+interface AuthenticatedScanRouteChildren {
+  AuthenticatedScanEventIdRoute: typeof AuthenticatedScanEventIdRoute
+  AuthenticatedScanIndexRoute: typeof AuthenticatedScanIndexRoute
+}
+
+const AuthenticatedScanRouteChildren: AuthenticatedScanRouteChildren = {
+  AuthenticatedScanEventIdRoute: AuthenticatedScanEventIdRoute,
+  AuthenticatedScanIndexRoute: AuthenticatedScanIndexRoute,
+}
+
+const AuthenticatedScanRouteWithChildren =
+  AuthenticatedScanRoute._addFileChildren(AuthenticatedScanRouteChildren)
+
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
+  AuthenticatedOrganizerRoute: typeof AuthenticatedOrganizerRouteWithChildren
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
+  AuthenticatedScanRoute: typeof AuthenticatedScanRouteWithChildren
   AuthenticatedTicketsRoute: typeof AuthenticatedTicketsRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
+  AuthenticatedOrganizerRoute: AuthenticatedOrganizerRouteWithChildren,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
+  AuthenticatedScanRoute: AuthenticatedScanRouteWithChildren,
   AuthenticatedTicketsRoute: AuthenticatedTicketsRoute,
 }
 
@@ -188,13 +503,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
