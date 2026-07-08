@@ -1,10 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@/hooks/use-session";
 import { formatCurrency, formatEventDate } from "@/lib/format";
 import { Badge } from "@/components/ui/badge";
-import { Pencil, Users, TicketCheck } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Pencil, Users, TicketCheck, Check, X, Clock } from "lucide-react";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/organizer/")({
   component: OrganizerDashboard,
@@ -12,18 +14,44 @@ export const Route = createFileRoute("/_authenticated/organizer/")({
 
 function OrganizerDashboard() {
   const { user } = useSession();
+  const qc = useQueryClient();
+
   const { data, isLoading } = useQuery({
     enabled: !!user,
     queryKey: ["organizer-events", user?.id],
     queryFn: async () => {
       const { data: events, error } = await supabase
         .from("events")
-        .select("*, ticket_types(id, name, price, currency, quantity_total, quantity_sold), tickets(id, price_paid, checked_in, status)")
+        .select("*, ticket_types(id, name, price, currency, quantity_total, quantity_sold), tickets(id, price_paid, checked_in, status, buyer_name, buyer_email, created_at, ticket_types(name))")
         .eq("organizer_id", user!.id)
         .order("created_at", { ascending: false });
       if (error) throw error;
       return events;
     },
+  });
+
+  const confirmPayment = useMutation({
+    mutationFn: async (ticketId: string) => {
+      const { error } = await supabase.rpc("confirm_ticket_payment", { _ticket_id: ticketId });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast.success("Pagamento confirmado! Bilhete ativado.");
+      qc.invalidateQueries({ queryKey: ["organizer-events", user?.id] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const rejectPayment = useMutation({
+    mutationFn: async (ticketId: string) => {
+      const { error } = await supabase.rpc("reject_ticket_payment", { _ticket_id: ticketId });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast.success("Bilhete rejeitado.");
+      qc.invalidateQueries({ queryKey: ["organizer-events", user?.id] });
+    },
+    onError: (e: Error) => toast.error(e.message),
   });
 
   if (isLoading) return <p className="text-muted-foreground">A carregar…</p>;
@@ -32,12 +60,18 @@ function OrganizerDashboard() {
   const totals = events.reduce(
     (acc, e) => {
       const tickets = e.tickets ?? [];
-      acc.sold += tickets.filter((t) => t.status !== "cancelled").length;
-      acc.revenue += tickets.reduce((s, t) => s + Number(t.price_paid ?? 0), 0);
+      acc.sold += tickets.filter((t) => t.status !== "cancelled" && t.status !== "pending_payment").length;
+      acc.revenue += tickets.filter((t) => t.status !== "pending_payment").reduce((s, t) => s + Number(t.price_paid ?? 0), 0);
       acc.checked += tickets.filter((t) => t.checked_in).length;
       return acc;
     },
     { sold: 0, revenue: 0, checked: 0 },
+  );
+
+  const pendingTickets = events.flatMap((e) =>
+    (e.tickets ?? [])
+      .filter((t) => t.status === "pending_payment")
+      .map((t) => ({ ...t, eventTitle: e.title, eventId: e.id }))
   );
 
   return (
@@ -48,6 +82,49 @@ function OrganizerDashboard() {
         <StatCard label="Check-ins" value={totals.checked.toString()} />
         <StatCard label="Receita" value={formatCurrency(totals.revenue)} />
       </div>
+
+      {pendingTickets.length > 0 && (
+        <div>
+          <h2 className="font-display text-xl font-bold mb-4 flex items-center gap-2">
+            <Clock className="h-5 w-5 text-amber-400" />
+            Pagamentos pendentes
+            <Badge variant="outline" className="bg-amber-500/15 text-amber-400 border-amber-500/30">
+              {pendingTickets.length}
+            </Badge>
+          </h2>
+          <div className="grid gap-3">
+            {pendingTickets.map((t) => (
+              <div key={t.id} className="rounded-2xl border border-amber-500/30 bg-amber-500/5 p-4 flex flex-col md:flex-row md:items-center gap-3 justify-between">
+                <div className="min-w-0">
+                  <p className="font-semibold truncate">{t.buyer_name} <span className="text-muted-foreground font-normal">— {t.eventTitle}</span></p>
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    {t.buyer_email} • {t.ticket_types?.name ?? "Bilhete"} • {formatCurrency(Number(t.price_paid))}
+                  </p>
+                </div>
+                <div className="flex gap-2 shrink-0">
+                  <Button
+                    size="sm"
+                    onClick={() => confirmPayment.mutate(t.id)}
+                    disabled={confirmPayment.isPending || rejectPayment.isPending}
+                    className="bg-emerald-500/90 hover:bg-emerald-500 text-white"
+                  >
+                    <Check className="h-3.5 w-3.5 mr-1" /> Confirmar
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => rejectPayment.mutate(t.id)}
+                    disabled={confirmPayment.isPending || rejectPayment.isPending}
+                    className="border-destructive/40 text-destructive hover:bg-destructive/10"
+                  >
+                    <X className="h-3.5 w-3.5 mr-1" /> Rejeitar
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div>
         <h2 className="font-display text-xl font-bold mb-4">Os teus eventos</h2>
