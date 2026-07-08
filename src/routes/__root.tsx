@@ -91,6 +91,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:description", content: "Compre bilhetes online para os melhores eventos. Bilhete digital com QR Code único, download em PDF e entrada rápida." },
       { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/1ff279dd-9f8c-44fe-af0d-654ffbe34117/id-preview-33ae438d--6031b02b-ed38-417b-9196-3d2be20341c5.lovable.app-1783418347296.png" },
       { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/1ff279dd-9f8c-44fe-af0d-654ffbe34117/id-preview-33ae438d--6031b02b-ed38-417b-9196-3d2be20341c5.lovable.app-1783418347296.png" },
+   { name: "theme-color", content: "#0B1120" },
+{ name: "apple-mobile-web-app-capable", content: "yes" },
+{ name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
+{ name: "apple-mobile-web-app-title", content: "TicketGo" },
     ],
     links: [
       {
@@ -98,6 +102,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: appCss,
       },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "manifest", href: "/manifest.json" },
+{ rel: "apple-touch-icon", href: "/icons/icon-192.png" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "" },
       { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" },
@@ -134,7 +140,13 @@ function RootComponent() {
     });
     return () => data.subscription.unsubscribe();
   }, [router, queryClient]);
-
+useEffect(() => {
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/sw.js").catch((err) => {
+      console.error("SW registration failed:", err);
+    });
+  }
+}, []);
   return (
     <QueryClientProvider client={queryClient}>
       <div className="min-h-screen bg-background text-foreground font-sans">
