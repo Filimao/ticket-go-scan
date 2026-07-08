@@ -14,6 +14,113 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_logs: {
+        Row: {
+          action: string
+          admin_id: string | null
+          created_at: string
+          id: string
+          metadata: Json | null
+          target_id: string | null
+          target_type: string | null
+        }
+        Insert: {
+          action: string
+          admin_id?: string | null
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          target_id?: string | null
+          target_type?: string | null
+        }
+        Update: {
+          action?: string
+          admin_id?: string | null
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          target_id?: string | null
+          target_type?: string | null
+        }
+        Relationships: []
+      }
+      checkins: {
+        Row: {
+          created_at: string
+          event_id: string
+          id: string
+          qr_code: string
+          result: string
+          scanned_by: string | null
+          ticket_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          event_id: string
+          id?: string
+          qr_code: string
+          result: string
+          scanned_by?: string | null
+          ticket_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          event_id?: string
+          id?: string
+          qr_code?: string
+          result?: string
+          scanned_by?: string | null
+          ticket_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "checkins_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "checkins_ticket_id_fkey"
+            columns: ["ticket_id"]
+            isOneToOne: false
+            referencedRelation: "tickets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_staff: {
+        Row: {
+          assigned_by: string | null
+          created_at: string
+          event_id: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          assigned_by?: string | null
+          created_at?: string
+          event_id: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          assigned_by?: string | null
+          created_at?: string
+          event_id?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_staff_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       events: {
         Row: {
           category: string | null
@@ -68,12 +175,41 @@ export type Database = {
         }
         Relationships: []
       }
+      platform_settings: {
+        Row: {
+          commission_type: string
+          commission_value: number
+          currency: string
+          id: number
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          commission_type?: string
+          commission_value?: number
+          currency?: string
+          id?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          commission_type?: string
+          commission_value?: number
+          currency?: string
+          id?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
           created_at: string
           full_name: string | null
           id: string
+          is_approved_organizer: boolean
+          is_blocked: boolean
           phone: string | null
           updated_at: string
         }
@@ -82,6 +218,8 @@ export type Database = {
           created_at?: string
           full_name?: string | null
           id: string
+          is_approved_organizer?: boolean
+          is_blocked?: boolean
           phone?: string | null
           updated_at?: string
         }
@@ -90,6 +228,8 @@ export type Database = {
           created_at?: string
           full_name?: string | null
           id?: string
+          is_approved_organizer?: boolean
+          is_blocked?: boolean
           phone?: string | null
           updated_at?: string
         }
@@ -146,6 +286,9 @@ export type Database = {
         Row: {
           buyer_email: string
           buyer_name: string
+          checked_in: boolean
+          checked_in_at: string | null
+          checked_in_by: string | null
           created_at: string
           currency: string
           event_id: string
@@ -160,6 +303,9 @@ export type Database = {
         Insert: {
           buyer_email: string
           buyer_name: string
+          checked_in?: boolean
+          checked_in_at?: string | null
+          checked_in_by?: string | null
           created_at?: string
           currency?: string
           event_id: string
@@ -174,6 +320,9 @@ export type Database = {
         Update: {
           buyer_email?: string
           buyer_name?: string
+          checked_in?: boolean
+          checked_in_at?: string | null
+          checked_in_by?: string | null
           created_at?: string
           currency?: string
           event_id?: string
@@ -225,6 +374,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      checkin_ticket: {
+        Args: { _event_id: string; _qr: string }
+        Returns: Json
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -235,7 +388,13 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "organizer" | "customer"
-      event_status: "draft" | "published" | "cancelled"
+      event_status:
+        | "draft"
+        | "published"
+        | "cancelled"
+        | "pending"
+        | "rejected"
+        | "ended"
       ticket_status: "valid" | "used" | "cancelled"
     }
     CompositeTypes: {
@@ -365,7 +524,14 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "organizer", "customer"],
-      event_status: ["draft", "published", "cancelled"],
+      event_status: [
+        "draft",
+        "published",
+        "cancelled",
+        "pending",
+        "rejected",
+        "ended",
+      ],
       ticket_status: ["valid", "used", "cancelled"],
     },
   },
