@@ -20,7 +20,7 @@ const eventsQuery = queryOptions({
   },
 });
 
-export const Route = createFileRoute("/events")({
+export const Route = createFileRoute("/events/")({
   head: () => ({
     meta: [
       { title: "Todos os eventos — TicketGo" },
