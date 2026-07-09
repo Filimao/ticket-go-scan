@@ -286,6 +286,7 @@ export type Database = {
         Row: {
           buyer_email: string
           buyer_name: string
+          buyer_whatsapp: string | null
           checked_in: boolean
           checked_in_at: string | null
           checked_in_by: string | null
@@ -303,6 +304,7 @@ export type Database = {
         Insert: {
           buyer_email: string
           buyer_name: string
+          buyer_whatsapp?: string | null
           checked_in?: boolean
           checked_in_at?: string | null
           checked_in_by?: string | null
@@ -320,6 +322,7 @@ export type Database = {
         Update: {
           buyer_email?: string
           buyer_name?: string
+          buyer_whatsapp?: string | null
           checked_in?: boolean
           checked_in_at?: string | null
           checked_in_by?: string | null
@@ -383,6 +386,7 @@ export type Database = {
         Returns: {
           buyer_email: string
           buyer_name: string
+          buyer_whatsapp: string | null
           checked_in: boolean
           checked_in_at: string | null
           checked_in_by: string | null
@@ -416,6 +420,7 @@ export type Database = {
         Returns: {
           buyer_email: string
           buyer_name: string
+          buyer_whatsapp: string | null
           checked_in: boolean
           checked_in_at: string | null
           checked_in_by: string | null
