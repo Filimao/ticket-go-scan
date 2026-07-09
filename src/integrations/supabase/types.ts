@@ -378,12 +378,64 @@ export type Database = {
         Args: { _event_id: string; _qr: string }
         Returns: Json
       }
+      confirm_ticket_payment: {
+        Args: { _ticket_id: string }
+        Returns: {
+          buyer_email: string
+          buyer_name: string
+          checked_in: boolean
+          checked_in_at: string | null
+          checked_in_by: string | null
+          created_at: string
+          currency: string
+          event_id: string
+          id: string
+          price_paid: number
+          qr_code: string
+          status: Database["public"]["Enums"]["ticket_status"]
+          ticket_type_id: string
+          used_at: string | null
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "tickets"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
           _user_id: string
         }
         Returns: boolean
+      }
+      reject_ticket_payment: {
+        Args: { _ticket_id: string }
+        Returns: {
+          buyer_email: string
+          buyer_name: string
+          checked_in: boolean
+          checked_in_at: string | null
+          checked_in_by: string | null
+          created_at: string
+          currency: string
+          event_id: string
+          id: string
+          price_paid: number
+          qr_code: string
+          status: Database["public"]["Enums"]["ticket_status"]
+          ticket_type_id: string
+          used_at: string | null
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "tickets"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
     }
     Enums: {
@@ -395,7 +447,7 @@ export type Database = {
         | "pending"
         | "rejected"
         | "ended"
-      ticket_status: "valid" | "used" | "cancelled"
+      ticket_status: "valid" | "used" | "cancelled" | "pending_payment"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -532,7 +584,7 @@ export const Constants = {
         "rejected",
         "ended",
       ],
-      ticket_status: ["valid", "used", "cancelled"],
+      ticket_status: ["valid", "used", "cancelled", "pending_payment"],
     },
   },
 } as const
