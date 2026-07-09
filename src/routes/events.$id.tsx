@@ -72,6 +72,7 @@ function EventDetail() {
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["tickets"] });
+      qc.invalidateQueries({ queryKey: ["event", event.id] });
       toast.success("Compra confirmada! Bilhetes emitidos.", {
         description: "Envie o pagamento M-Pesa/ eMola para 850113678/ 866955676 e apresente o QR à entrada.",
       });
