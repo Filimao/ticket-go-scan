@@ -1,0 +1,1 @@
+UPDATE public.events SET starts_at = '2026-08-15 12:30:00+00' WHERE id = '9eb3a034-6d02-4749-b02b-09f032b9b86d';
