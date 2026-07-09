@@ -73,7 +73,7 @@ function EventDetail() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["tickets"] });
       toast.success("Compra confirmada! Bilhetes emitidos.", {
-        description: "Envie o pagamento M-Pesa para +258 850 147 162 e apresente o QR à entrada.",
+        description: "Envie o pagamento M-Pesa/ eMola para 850113678/ 866955676 e apresente o QR à entrada.",
       });
       router.navigate({ to: "/tickets" });
     },
@@ -202,7 +202,7 @@ function EventDetail() {
                 )}
 
                 <p className="mt-4 text-[11px] text-center text-muted-foreground leading-relaxed">
-                  Pagamento por <strong>M-Pesa</strong> para <strong className="text-gold">+258 850 147 162</strong>. Após pagar, o bilhete é enviado por email e disponível em PDF.
+                  Pagamento por <strong>M-Pesa/ eMola</strong> para <strong className="text-gold">850113678/ 866955676</strong>. Após pagar, o bilhete é enviado por email e disponível em PDF.
                 </p>
               </>
             )}
