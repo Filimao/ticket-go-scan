@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@/hooks/use-session";
 import { Button } from "@/components/ui/button";
-import { Calendar, MapPin, Download, QrCode, Ticket } from "lucide-react";
+import { Calendar, MapPin, Download, QrCode, Ticket, MessageCircle } from "lucide-react";
 import { formatCurrency, formatEventDate, formatEventTime } from "@/lib/format";
 import { downloadTicketPdf } from "@/lib/ticket-pdf";
 import { toast } from "sonner";
@@ -20,6 +20,7 @@ interface TicketRow {
   qr_code: string;
   buyer_name: string;
   buyer_email: string;
+  buyer_whatsapp: string | null;
   price_paid: number;
   currency: string;
   status: string;
@@ -36,7 +37,7 @@ function TicketsPage() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("tickets")
-        .select("id, qr_code, buyer_name, buyer_email, price_paid, currency, status, created_at, events(id, title, starts_at, city, venue, image_url), ticket_types(name)")
+        .select("id, qr_code, buyer_name, buyer_email, buyer_whatsapp, price_paid, currency, status, created_at, events(id, title, starts_at, city, venue, image_url), ticket_types(name)")
         .eq("user_id", user!.id)
         .order("created_at", { ascending: false });
       if (error) throw error;
@@ -127,6 +128,22 @@ function TicketCard({ t }: { t: TicketRow }) {
           <span className="font-display text-xl font-bold text-gold">{formatCurrency(Number(t.price_paid), t.currency)}</span>
           {t.status === "valid" && (
             <Button onClick={dl} size="sm" variant="outline" className="border-border/60"><Download className="h-4 w-4 mr-2" /> Baixar PDF</Button>
+          )}
+          {t.status === "valid" && (
+            <Button
+              onClick={() => {
+                const num = (t.buyer_whatsapp ?? "").replace(/\D/g, "");
+                const msg = encodeURIComponent(
+                  `O meu bilhete TicketGo para "${t.events?.title ?? "evento"}" — ID ${t.id.slice(0,8).toUpperCase()}. Baixe o PDF em ${window.location.origin}/tickets`
+                );
+                window.open(num ? `https://wa.me/${num}?text=${msg}` : `https://wa.me/?text=${msg}`, "_blank");
+              }}
+              size="sm"
+              variant="outline"
+              className="border-emerald-500/40 text-emerald-400 hover:bg-emerald-500/10"
+            >
+              <MessageCircle className="h-4 w-4 mr-2" /> WhatsApp
+            </Button>
           )}
         </div>
         {t.status === "pending_payment" && (

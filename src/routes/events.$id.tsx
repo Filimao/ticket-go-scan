@@ -48,9 +48,12 @@ function EventDetail() {
   const [qty, setQty] = useState(1);
   const [buyerName, setBuyerName] = useState("");
   const [buyerEmail, setBuyerEmail] = useState("");
+  const [buyerWhatsapp, setBuyerWhatsapp] = useState("");
 
   const selected = types.find(t => t.id === selectedTypeId) ?? types[0];
   const total = selected ? Number(selected.price) * qty : 0;
+  const totalAvailable = types.reduce((s, t) => s + Math.max(0, t.quantity_total - t.quantity_sold), 0);
+  const totalCapacity = types.reduce((s, t) => s + t.quantity_total, 0);
 
   const buy = useMutation({
     mutationFn: async () => {
@@ -62,6 +65,7 @@ function EventDetail() {
         ticket_type_id: selected.id,
         buyer_name: buyerName || (user.email ?? "Convidado"),
         buyer_email: buyerEmail || user.email!,
+        buyer_whatsapp: buyerWhatsapp || null,
         price_paid: Number(selected.price),
         currency: selected.currency,
         qr_code: `TG-${event.id.slice(0,8)}-${crypto.randomUUID()}`,
@@ -76,6 +80,13 @@ function EventDetail() {
       toast.success("Compra confirmada! Bilhetes emitidos.", {
         description: "Envie o pagamento M-Pesa/ eMola para 850113678/ 866955676 e apresente o QR à entrada.",
       });
+      if (buyerWhatsapp) {
+        const num = buyerWhatsapp.replace(/\D/g, "");
+        const msg = encodeURIComponent(
+          `Olá ${buyerName || "cliente"}! O seu bilhete para "${event.title}" foi emitido. Aceda em ${window.location.origin}/tickets para descarregar o PDF com o QR code. Obrigado por escolher TicketGo!`
+        );
+        window.open(`https://wa.me/${num}?text=${msg}`, "_blank");
+      }
       router.navigate({ to: "/tickets" });
     },
     onError: (err: Error) => {
@@ -124,6 +135,28 @@ function EventDetail() {
             <h2 className="font-display text-xl font-bold flex items-center gap-2">
               <TicketIcon className="h-5 w-5 text-gold" /> Escolha o seu bilhete
             </h2>
+
+            {totalCapacity > 0 && (
+              <div className="mt-3 rounded-xl border border-gold/30 bg-gold/5 px-3 py-2 text-xs">
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground">Bilhetes restantes</span>
+                  <span className="font-semibold text-gold">{totalAvailable} / {totalCapacity}</span>
+                </div>
+                <div className="mt-2 space-y-1">
+                  {types.map((t) => {
+                    const av = Math.max(0, t.quantity_total - t.quantity_sold);
+                    return (
+                      <div key={t.id} className="flex items-center justify-between text-[11px] text-muted-foreground">
+                        <span>{t.name}</span>
+                        <span className={av === 0 ? "text-destructive font-semibold" : "text-foreground"}>
+                          {av === 0 ? "Esgotado" : `${av} restantes`}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
 
             <div className="mt-4 space-y-2">
               {types.map((t) => {
@@ -179,6 +212,11 @@ function EventDetail() {
                     <div>
                       <Label htmlFor="be" className="text-xs uppercase tracking-wider text-muted-foreground">Email</Label>
                       <Input id="be" type="email" value={buyerEmail} onChange={(e) => setBuyerEmail(e.target.value)} placeholder={user.email ?? ""} className="mt-1 bg-background border-border/60" />
+                    </div>
+                    <div>
+                      <Label htmlFor="bw" className="text-xs uppercase tracking-wider text-muted-foreground">WhatsApp (opcional)</Label>
+                      <Input id="bw" type="tel" value={buyerWhatsapp} onChange={(e) => setBuyerWhatsapp(e.target.value)} placeholder="+258 84 123 4567" className="mt-1 bg-background border-border/60" />
+                      <p className="mt-1 text-[10px] text-muted-foreground">Após a compra, abrimos o WhatsApp com o link do seu bilhete.</p>
                     </div>
                   </div>
                 )}
