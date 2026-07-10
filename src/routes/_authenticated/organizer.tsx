@@ -38,21 +38,21 @@ function OrganizerLayout() {
     <div className="min-h-screen bg-background">
       <SiteHeader />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 py-8">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
           <div>
             <p className="text-xs font-semibold tracking-widest text-gold uppercase">Painel</p>
             <h1 className="font-display text-3xl md:text-4xl font-bold mt-1">Organizador</h1>
           </div>
-          <nav className="flex gap-2 text-sm">
+          <nav className="flex flex-col sm:flex-row gap-2 text-sm w-full sm:w-auto">
             <Link
               to="/organizer"
-              className={`px-4 py-2 rounded-lg border transition ${pathname === "/organizer" ? "bg-primary text-primary-foreground border-transparent" : "border-border/60 hover:bg-muted"}`}
+              className={`px-4 py-2 rounded-lg border transition text-center w-full sm:w-auto ${pathname === "/organizer" ? "bg-primary text-primary-foreground border-transparent" : "border-border/60 hover:bg-muted"}`}
             >
               <LayoutDashboard className="h-4 w-4 inline mr-2" />Dashboard
             </Link>
             <Link
               to="/organizer/events/new"
-              className="px-4 py-2 rounded-lg bg-[image:var(--gradient-gold)] text-navy-deep font-semibold"
+              className="px-4 py-2 rounded-lg bg-[image:var(--gradient-gold)] text-navy-deep font-semibold text-center w-full sm:w-auto"
             >
               <PlusCircle className="h-4 w-4 inline mr-2" />Novo evento
             </Link>
