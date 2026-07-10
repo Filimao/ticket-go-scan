@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { EventCard } from "@/components/event-card";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Search } from "lucide-react";
 
 const eventsQuery = queryOptions({
@@ -29,7 +30,31 @@ export const Route = createFileRoute("/events/")({
   }),
   loader: ({ context }) => { context.queryClient.ensureQueryData(eventsQuery); },
   component: EventsPage,
+  pendingComponent: EventsPending,
 });
+
+function EventsPending() {
+  return (
+    <main className="mx-auto max-w-7xl px-4 sm:px-6 py-12">
+      <header className="mb-10">
+        <Skeleton className="h-10 md:h-12 w-72 max-w-full" />
+        <Skeleton className="mt-3 h-4 w-40" />
+      </header>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div key={i} className="overflow-hidden rounded-2xl border border-border/60 bg-card">
+            <Skeleton className="aspect-[4/3] w-full rounded-none bg-muted" />
+            <div className="p-5 space-y-3">
+              <Skeleton className="h-5 w-3/4 bg-muted" />
+              <Skeleton className="h-4 w-1/2 bg-muted" />
+              <Skeleton className="h-4 w-2/3 bg-muted" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </main>
+  );
+}
 
 function EventsPage() {
   const { data: events } = useSuspenseQuery(eventsQuery);
