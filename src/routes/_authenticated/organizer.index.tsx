@@ -5,6 +5,7 @@ import { useSession } from "@/hooks/use-session";
 import { formatCurrency, formatEventDate } from "@/lib/format";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Pencil, Users, TicketCheck, Check, X, Clock } from "lucide-react";
 import { toast } from "sonner";
 
@@ -54,7 +55,39 @@ function OrganizerDashboard() {
     onError: (e: Error) => toast.error(e.message),
   });
 
-  if (isLoading) return <p className="text-muted-foreground">A carregar…</p>;
+  if (isLoading) {
+    return (
+      <div className="space-y-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="rounded-2xl border border-border/60 bg-card p-5">
+              <Skeleton className="h-3 w-20 bg-muted" />
+              <Skeleton className="mt-3 h-8 md:h-9 w-24 bg-muted" />
+            </div>
+          ))}
+        </div>
+        <div>
+          <Skeleton className="h-6 w-40 bg-muted mb-4" />
+          <div className="grid gap-4">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="rounded-2xl border border-border/60 bg-card p-5 flex flex-col md:flex-row md:items-center gap-4">
+                <div className="flex-1 min-w-0 space-y-2">
+                  <Skeleton className="h-5 w-1/2 bg-muted" />
+                  <Skeleton className="h-4 w-2/3 bg-muted" />
+                  <Skeleton className="h-3 w-32 bg-muted" />
+                </div>
+                <div className="flex gap-2">
+                  <Skeleton className="h-9 w-20 bg-muted" />
+                  <Skeleton className="h-9 w-20 bg-muted" />
+                  <Skeleton className="h-9 w-20 bg-muted" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const events = data ?? [];
   const totals = events.reduce(
@@ -94,19 +127,19 @@ function OrganizerDashboard() {
           </h2>
           <div className="grid gap-3">
             {pendingTickets.map((t) => (
-              <div key={t.id} className="rounded-2xl border border-amber-500/30 bg-amber-500/5 p-4 flex flex-col md:flex-row md:items-center gap-3 justify-between">
+              <div key={t.id} className="rounded-2xl border border-amber-500/30 bg-amber-500/5 p-4 flex flex-col sm:flex-row sm:items-center gap-3 justify-between">
                 <div className="min-w-0">
                   <p className="font-semibold truncate">{t.buyer_name} <span className="text-muted-foreground font-normal">— {t.eventTitle}</span></p>
                   <p className="text-xs text-muted-foreground mt-0.5">
                     {t.buyer_email} • {t.ticket_types?.name ?? "Bilhete"} • {formatCurrency(Number(t.price_paid))}
                   </p>
                 </div>
-                <div className="flex gap-2 shrink-0">
+                <div className="flex flex-col sm:flex-row gap-2 shrink-0 w-full sm:w-auto">
                   <Button
                     size="sm"
                     onClick={() => confirmPayment.mutate(t.id)}
                     disabled={confirmPayment.isPending || rejectPayment.isPending}
-                    className="bg-emerald-500/90 hover:bg-emerald-500 text-white"
+                    className="bg-emerald-500/90 hover:bg-emerald-500 text-white w-full sm:w-auto"
                   >
                     <Check className="h-3.5 w-3.5 mr-1" /> Confirmar
                   </Button>
@@ -115,7 +148,7 @@ function OrganizerDashboard() {
                     variant="outline"
                     onClick={() => rejectPayment.mutate(t.id)}
                     disabled={confirmPayment.isPending || rejectPayment.isPending}
-                    className="border-destructive/40 text-destructive hover:bg-destructive/10"
+                    className="border-destructive/40 text-destructive hover:bg-destructive/10 w-full sm:w-auto"
                   >
                     <X className="h-3.5 w-3.5 mr-1" /> Rejeitar
                   </Button>
@@ -139,7 +172,7 @@ function OrganizerDashboard() {
               const totalCap = (e.ticket_types ?? []).reduce((s, t) => s + t.quantity_total, 0);
               const sold = (e.ticket_types ?? []).reduce((s, t) => s + t.quantity_sold, 0);
               return (
-                <div key={e.id} className="rounded-2xl border border-border/60 bg-card p-5 flex flex-col md:flex-row md:items-center gap-4">
+                <div key={e.id} className="rounded-2xl border border-border/60 bg-card p-5 flex flex-col sm:flex-row sm:items-center gap-4">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
                       <h3 className="font-semibold truncate">{e.title}</h3>
@@ -152,14 +185,14 @@ function OrganizerDashboard() {
                       Vendidos: <span className="text-foreground font-medium">{sold}</span> / {totalCap}
                     </p>
                   </div>
-                  <div className="flex gap-2">
-                    <Link to="/organizer/events/$id" params={{ id: e.id }} className="text-sm px-3 py-2 rounded-lg border border-border/60 hover:bg-muted flex items-center gap-1">
+                  <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                    <Link to="/organizer/events/$id" params={{ id: e.id }} className="text-sm px-3 py-2 rounded-lg border border-border/60 hover:bg-muted flex items-center justify-center gap-1 w-full sm:w-auto">
                       <Pencil className="h-3.5 w-3.5" />Editar
                     </Link>
-                    <Link to="/scan/$eventId" params={{ eventId: e.id }} className="text-sm px-3 py-2 rounded-lg border border-border/60 hover:bg-muted flex items-center gap-1">
+                    <Link to="/scan/$eventId" params={{ eventId: e.id }} className="text-sm px-3 py-2 rounded-lg border border-border/60 hover:bg-muted flex items-center justify-center gap-1 w-full sm:w-auto">
                       <TicketCheck className="h-3.5 w-3.5" />Scan
                     </Link>
-                    <Link to="/events/$id" params={{ id: e.id }} className="text-sm px-3 py-2 rounded-lg border border-border/60 hover:bg-muted flex items-center gap-1">
+                    <Link to="/events/$id" params={{ id: e.id }} className="text-sm px-3 py-2 rounded-lg border border-border/60 hover:bg-muted flex items-center justify-center gap-1 w-full sm:w-auto">
                       <Users className="h-3.5 w-3.5" />Ver
                     </Link>
                   </div>
@@ -177,7 +210,7 @@ function StatCard({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-2xl border border-border/60 bg-card p-5">
       <p className="text-xs uppercase tracking-widest text-muted-foreground">{label}</p>
-      <p className="font-display text-2xl md:text-3xl font-bold mt-2">{value}</p>
+      <p className="font-display text-xl sm:text-2xl md:text-3xl font-bold mt-2 break-words">{value}</p>
     </div>
   );
 }
