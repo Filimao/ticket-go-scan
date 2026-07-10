@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@/hooks/use-session";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Calendar, MapPin, Download, QrCode, Ticket, MessageCircle } from "lucide-react";
 import { formatCurrency, formatEventDate, formatEventTime } from "@/lib/format";
 import { downloadTicketPdf } from "@/lib/ticket-pdf";
@@ -52,7 +53,27 @@ function TicketsPage() {
         <p className="mt-2 text-muted-foreground">Todos os seus bilhetes digitais num só lugar.</p>
       </header>
 
-      {isLoading && <p className="text-muted-foreground">A carregar…</p>}
+      {isLoading && (
+        <div className="space-y-4">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="grid md:grid-cols-[1fr_auto] gap-6 rounded-3xl border border-border/60 bg-card p-6">
+              <div className="min-w-0 space-y-3">
+                <Skeleton className="h-7 w-2/3 bg-muted" />
+                <div className="grid sm:grid-cols-2 gap-2">
+                  <Skeleton className="h-4 w-40 bg-muted" />
+                  <Skeleton className="h-4 w-48 bg-muted" />
+                  <Skeleton className="h-4 w-32 bg-muted" />
+                  <Skeleton className="h-4 w-36 bg-muted" />
+                </div>
+                <Skeleton className="h-9 w-40 bg-muted mt-2" />
+              </div>
+              <div className="grid place-items-center">
+                <Skeleton className="h-32 w-32 rounded-2xl bg-muted" />
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
 
       {!isLoading && (!tickets || tickets.length === 0) && (
         <div className="rounded-3xl border border-border/60 bg-card p-12 text-center">
