@@ -1,0 +1,1 @@
+UPDATE public.events SET image_url = '/images/tsika-mona.jpg' WHERE id = '9eb3a034-6d02-4749-b02b-09f032b9b86d';

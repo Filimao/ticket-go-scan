@@ -83,7 +83,7 @@ function EventDetail() {
       if (buyerWhatsapp) {
         const num = buyerWhatsapp.replace(/\D/g, "");
         const msg = encodeURIComponent(
-          `Olá ${buyerName || "cliente"}! O seu bilhete para "${event.title}" foi emitido. Aceda em ${window.location.origin}/tickets para descarregar o PDF com o QR code. Obrigado por escolher TicketGo!`
+          `Olá ${buyerName || "cliente"}! O seu bilhete para "${event.title}" foi emitido. Aceda em https://ticketgomz.vercel.app/tickets para descarregar o PDF com o QR code. Obrigado por escolher TicketGo!`
         );
         window.open(`https://wa.me/${num}?text=${msg}`, "_blank");
       }

@@ -134,7 +134,7 @@ function TicketCard({ t }: { t: TicketRow }) {
               onClick={() => {
                 const num = (t.buyer_whatsapp ?? "").replace(/\D/g, "");
                 const msg = encodeURIComponent(
-                  `O meu bilhete TicketGo para "${t.events?.title ?? "evento"}" — ID ${t.id.slice(0,8).toUpperCase()}. Baixe o PDF em ${window.location.origin}/tickets`
+                  `O meu bilhete TicketGo para "${t.events?.title ?? "evento"}" — ID ${t.id.slice(0,8).toUpperCase()}. Baixe o PDF em https://ticketgomz.vercel.app/tickets`
                 );
                 window.open(num ? `https://wa.me/${num}?text=${msg}` : `https://wa.me/?text=${msg}`, "_blank");
               }}
