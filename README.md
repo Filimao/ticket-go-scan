@@ -5,7 +5,6 @@ Plataforma web para criar eventos, vender bilhetes digitais e controlar as entra
 🔗 **Demo online:** [ticket-go-scan.vercel.app](https://ticket-go-scan.vercel.app)
 
 
-
 ## 🎯 Objetivo
 
 Reduzir a dependência de processos manuais na venda e no controlo de bilhetes, acompanhando o participante desde a descoberta do evento até à entrada no recinto.
