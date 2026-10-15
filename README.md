@@ -1,116 +1,117 @@
-# 🎟️ TicketGo — Plataforma Inteligente de Bilhetes e Gestão de Eventos
+# 🎟️ TicketGo — Bilhetes e Gestão de Eventos em Moçambique
 
-O **TicketGo** é uma plataforma digital concebida para simplificar a criação, divulgação, venda e gestão de bilhetes para eventos. O projeto pretende conectar organizadores de eventos e participantes através de uma experiência digital moderna, segura e intuitiva.
+Plataforma web para criar eventos, vender bilhetes digitais e controlar as entradas com validação por QR Code. Liga organizadores e participantes numa experiência simples, pensada para o mercado moçambicano.
 
-A plataforma foi idealizada para permitir que organizadores criem e administrem eventos, acompanhem as vendas e controlem as entradas, enquanto os participantes podem descobrir eventos e aceder aos seus bilhetes de forma prática.
+🔗 **Demo online:** [ticket-go-scan.vercel.app](https://ticket-go-scan.vercel.app)
 
-Com foco no mercado moçambicano, o TicketGo procura modernizar a gestão de eventos através da digitalização dos bilhetes, da validação por QR Code e de ferramentas de administração centralizadas.
 
-## 🎯 Objetivo do Projeto
 
-Desenvolver um ecossistema digital de eventos que facilite a comercialização de bilhetes, reduza a dependência de processos manuais e melhore a experiência dos organizadores e participantes, desde a descoberta do evento até à entrada no recinto.
+## 🎯 Objetivo
 
-## ✨ Principais Funcionalidades
+Reduzir a dependência de processos manuais na venda e no controlo de bilhetes, acompanhando o participante desde a descoberta do evento até à entrada no recinto.
 
-### 🎫 Gestão de eventos e bilhetes
-- Criação e publicação de eventos.
-- Apresentação de informações, datas, locais, imagens e preços.
-- Organização de diferentes categorias de bilhetes.
-- Gestão de disponibilidade e vendas.
-- Interface para descobrir e consultar eventos.
+## ✨ Funcionalidades
 
-### 👤 Gestão de utilizadores
-- Registo e autenticação de utilizadores.
-- Perfis e acesso personalizado.
-- Área de gestão para organizadores.
-- Administração centralizada da plataforma.
+**Eventos e bilhetes**
+- Criação e publicação de eventos com datas, locais, imagens e preços.
+- Diferentes categorias de bilhetes e gestão de disponibilidade.
+- Página para descobrir e consultar eventos.
 
-### 📱 Bilhetes digitais e QR Code
-- Geração de bilhetes digitais com QR Code.
-- Validação de bilhetes à entrada dos eventos.
-- Ferramentas de check-in para equipas de acesso.
-- Prevenção de reutilização de bilhetes já validados, mediante validação no servidor.
+**Bilhetes digitais e check-in**
+- Geração de bilhetes com QR Code.
+- Leitura do QR Code pela câmara para validar a entrada.
+- Validação no servidor, para impedir que um bilhete já usado seja aceite outra vez.
 
-### 📊 Painel do organizador
+**Painel do organizador**
 - Gestão dos eventos publicados.
-- Acompanhamento das vendas e dos bilhetes emitidos.
-- Consulta de estatísticas e informações relevantes.
-- Gestão do acesso dos participantes.
+- Acompanhamento das vendas e dos bilhetes emitidos, com estatísticas e gráficos.
 
-### 🛡️ Administração e segurança
-- Gestão de utilizadores, organizadores e eventos.
-- Controlo de permissões de acesso.
-- Separação de funções administrativas e operacionais.
-- Proteção dos dados e das operações da plataforma.
+**Utilizadores e permissões**
+- Registo e autenticação.
+- Papéis separados para participantes, organizadores e administradores, com controlo de acesso.
 
-### 💳 Pagamentos digitais
-- Estrutura preparada para integrar pagamentos eletrónicos.
-- Possibilidade de adaptar os pagamentos ao mercado moçambicano, incluindo M-Pesa e e-Mola, caso as integrações sejam implementadas e devidamente configuradas.
+**Pagamentos**
+- Arquitetura preparada para pagamentos eletrónicos, incluindo M-Pesa e e-Mola. A integração está em desenvolvimento.
 
-### 📱 Experiência multiplataforma
-- Interface responsiva para computadores, tablets e smartphones.
-- Navegação intuitiva e apresentação moderna dos eventos.
-- Arquitetura preparada para evoluir com novas funcionalidades.
+**Interface**
+- Design responsivo para telemóvel, tablet e computador.
 
 ## 🛠️ Tecnologias
 
-A arquitetura inicialmente prevista para o projeto utiliza tecnologias modernas de desenvolvimento web:
+| Área | Ferramentas |
+|------|-------------|
+| Interface | React, TypeScript, Tailwind CSS, shadcn/ui (Radix UI) |
+| Aplicação | TanStack Start, TanStack Router, TanStack Query |
+| Backend e dados | Supabase (autenticação, PostgreSQL, regras de acesso RLS) |
+| QR Code | `qrcode` (geração) e `html5-qrcode` (leitura pela câmara) |
+| Formulários e gráficos | React Hook Form, Zod, Recharts |
+| Publicação | Vercel |
 
-- **React** — construção da interface do utilizador.
-- **TypeScript** — tipagem estática e maior consistência do código.
-- **Tailwind CSS** — estilização e design responsivo.
-- **Supabase** — autenticação, base de dados e funcionalidades de backend.
-- **QR Code** — identificação e validação digital de bilhetes.
-- **Git e GitHub** — controlo de versões e colaboração.
-- **Vercel** — possibilidade de alojamento e publicação da aplicação web.
+## 🚀 Como correr localmente
 
-*Nota: confirma as tecnologias efetivamente utilizadas no repositório e ajusta esta lista conforme a implementação atual.*
+Requisitos: Node.js 18+ (ou Bun) e um projeto no [Supabase](https://supabase.com).
 
-## 🇲🇿 Foco em Moçambique
+```bash
+# 1. Clonar o repositório
+git clone https://github.com/Filimao/ticket-go-scan.git
+cd ticket-go-scan
 
-O TicketGo pretende responder às necessidades do setor de eventos em Moçambique, oferecendo uma alternativa digital para a organização de festas, concertos, conferências, eventos empresariais, atividades académicas e outras iniciativas.
+# 2. Instalar as dependências
+npm install
 
-A plataforma procura tornar a gestão de bilhetes mais eficiente, facilitar o controlo de entradas e criar melhores condições para organizadores e participantes.
+# 3. Criar o ficheiro .env na raiz do projeto (veja abaixo)
 
-## 🚀 Visão do Projeto
+# 4. Iniciar em modo de desenvolvimento
+npm run dev
+```
 
-Construir uma plataforma de referência para a gestão e comercialização de bilhetes em Moçambique, combinando tecnologia, segurança e simplicidade para melhorar a experiência de participação em eventos.
+Variáveis de ambiente do ficheiro `.env`:
 
-## 🔐 Princípios de Segurança
+```env
+VITE_SUPABASE_URL=
+VITE_SUPABASE_PUBLISHABLE_KEY=
+VITE_SUPABASE_PROJECT_ID=
+SUPABASE_URL=
+SUPABASE_PUBLISHABLE_KEY=
+SUPABASE_PROJECT_ID=
+```
 
-- Autenticação dos utilizadores.
-- Controlo de acesso de acordo com os papéis atribuídos.
+> O ficheiro `.env` não deve ser enviado para o GitHub. Use apenas a chave pública (publishable / `anon`) do Supabase e nunca coloque chaves secretas no código do cliente.
+
+Outros comandos:
+
+```bash
+npm run build    # gerar a versão de produção
+npm run preview  # pré-visualizar a versão de produção
+npm run lint     # verificar o código
+npm run format   # formatar o código
+```
+
+## 🔐 Segurança
+
+- Autenticação de utilizadores e controlo de acesso por papel.
 - Validação dos bilhetes no servidor.
-- Proteção das operações administrativas.
-- Gestão segura das informações dos participantes.
-- Verificação dos pagamentos antes de confirmar compras, quando aplicável.
+- Operações administrativas protegidas.
+- Regras de acesso (RLS) no Supabase para proteger os dados.
 
-## 📌 Estado do Projeto
+## 📌 Estado do projeto
 
-O TicketGo é um projeto em desenvolvimento, com uma arquitetura orientada para a gestão de eventos, organização de bilhetes e validação de entradas. As funcionalidades disponíveis dependem da versão implementada e das integrações efetivamente configuradas.
+Em desenvolvimento. As funcionalidades disponíveis dependem da versão publicada e das integrações configuradas.
 
-## 🔮 Funcionalidades Futuras
+Ideias para as próximas versões:
 
 - Aplicação móvel para Android e iOS.
 - Notificações de confirmação e lembretes de eventos.
-- Integração com mais métodos de pagamento.
+- Mais métodos de pagamento.
 - Relatórios avançados para organizadores.
-- Sistema de promoções, descontos e códigos de campanha.
-- Melhorias no check-in e na análise de entradas em tempo real.
+- Promoções, descontos e códigos de campanha.
+- Análise de entradas em tempo real.
 
-## 🤝 Contribuição
+## ⚠️ Aviso
 
-Contribuições para melhorar a plataforma, corrigir erros, desenvolver funcionalidades e reforçar a segurança são bem-vindas.
+O TicketGo é uma plataforma independente de gestão de eventos. A venda de bilhetes e os pagamentos dependem das integrações e dos serviços configurados no projeto.
 
-1. Faz um fork do repositório.
-2. Cria uma branch para a tua funcionalidade.
-3. Implementa e testa as alterações.
-4. Envia um Pull Request com uma descrição clara das mudanças.
+## 👤 Autor
 
-## ⚠️ Nota
-
-O TicketGo é uma plataforma independente de gestão de eventos. A disponibilidade de pagamentos, vendas de bilhetes e outras funcionalidades depende das integrações e dos serviços configurados no projeto.
-
----
-
-**TicketGo — Descubra eventos. Garanta o seu bilhete. Viva a experiência.** 🎟️🇲🇿
+**Filimão Feliz Mondlane** — Full-Stack Developer, Maputo, Moçambique
+[GitHub](https://github.com/Filimao) · [LinkedIn](https://linkedin.com/in/filimaomondlane)
