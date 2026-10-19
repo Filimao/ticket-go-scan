@@ -12,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SiteHeader } from "@/components/site-header";
+import { SiteFooter } from "@/components/site-footer";
 import { Toaster } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -152,6 +153,7 @@ useEffect(() => {
       <div className="min-h-screen bg-background text-foreground font-sans">
         <SiteHeader />
         <Outlet />
+        <SiteFooter />
       </div>
       <Toaster theme="dark" richColors position="top-right" />
     </QueryClientProvider>
