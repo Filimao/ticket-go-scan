@@ -135,13 +135,6 @@ function Landing() {
           </Button>
         </div>
       </section>
-
-      <footer className="border-t border-border/60 py-10">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-          <p>© {new Date().getFullYear()} TicketGo. No coração dos grandes eventos.</p>
-          <p>Feito com paixão em Moçambique 🇲🇿</p>
-        </div>
-      </footer>
     </main>
   );
 }
