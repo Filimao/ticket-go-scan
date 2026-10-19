@@ -24,7 +24,7 @@ export function EventCard({ event }: EventCardProps) {
       params={{ id: event.id }}
       className="group relative overflow-hidden rounded-2xl border border-border/60 bg-card transition-all hover:border-gold/50 hover:shadow-[var(--shadow-elegant)]"
     >
-      <div className="relative aspect-[4/3] overflow-hidden bg-muted">
+      <div className="relative aspect-[4/5] overflow-hidden bg-muted">
         {event.image_url && (
           <img
             src={event.image_url}
